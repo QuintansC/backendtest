@@ -15,18 +15,27 @@ public class UserController {
     private UserRepository repository;
     @GetMapping(value = "/{id}")
     public Usuario findById(@PathVariable Long id){
-        Usuario result = repository.findById(id).get();
-        return result;
+        return repository.findById(id).get();
     }
     @GetMapping
     public List<Usuario> findAll(){
-        List<Usuario> result = repository.findAll();
-        return result;
+        return repository.findAll();
     }
-
     @PostMapping
     public Usuario insert(@RequestBody Usuario User){
-        Usuario result = repository.save(User);
-        return result;
+        return repository.save(User);
+    }
+
+    @PostMapping(value = "/login")
+    public String login(@RequestBody Usuario User){
+        List<Usuario> result = repository.findAll();
+
+        for (Usuario usuario : result) {
+            if ((usuario.getNome().equals(User.getNome()) ||  usuario.getEmail().equals(User.getEmail()))  && usuario.getSenha().equals(User.getSenha())) {
+                return "Logado com sucesso";
+            }
+        }
+
+        return "Email, senha ou Usuario errados";
     }
 }
